@@ -1,5 +1,5 @@
 import User from './User.js'
-import AuthValidator from './AuthValidator.js';
+import AuthValidator from './AuthValidator.js'
 
 let validator = new AuthValidator();
 document.getElementById('btnClick').onclick = onSubmit;
