@@ -1,0 +1,24 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "\"test\"",
+  "main": "\"index.js\"",
+  "scripts": {
+    "build": "postcss css/style.css -o build/style.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tatjana1994/Login.git"
+  },
+  "author": "\"Tatjana Devrnja\"",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tatjana1994/Login/issues"
+  },
+  "homepage": "https://github.com/tatjana1994/Login#readme",
+  "dependencies": {
+    "autoprefixer": "^9.8.6",
+    "postcss-cli": "^7.1.1",
+    "tailwindcss": "^1.6.2"
+  }
+}
