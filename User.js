@@ -8,7 +8,6 @@ export default class User {
         this.birthDate = birthDate;
         this.gender = gender;
         this.email = email;
-        this.password = password;
-        
+        this.password = password;      
     }
 }
