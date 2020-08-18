@@ -1,51 +1,78 @@
+import ValidationError from "./ValidationError.js";
 
-import AuthValidator from './AuthValidator.js'
+document.getElementById("btnClick").onclick = onSubmit;
 
+let email_error = document.getElementById("email_error");
+let pass_error = document.getElementById("pass_error");
+let login_error = document.getElementById("login_error");
 
-let validator = new AuthValidator();
-document.getElementById('btnClick').onclick = onSubmit;
+function onSubmit() {
+  let email = document.getElementById("email").value;
+  let password = document.getElementById("password").value;
+  let spinner = document.getElementById("spinner");
 
-let email_error = document.getElementById('email_error');
-let pass_error = document.getElementById('pass_error');
+  spinner.classList.add("spinner");
 
-function onSubmit(){
+  try {
+    spinner.classList.remove("spinner");
+    if (!email || !password) {
+      throw new ValidationError("Fields shouldn't be empty!");
+    }
+    Login()
+      .then(() => {
+        login_error.classList.remove("hidden");
+        document.getElementById("login_error").innerHTML = "YOU ARE LOGGED IN!";
+      })
+      .catch((error) => {
+        login_error.classList.remove("hidden");
+        document.getElementById("login_error").innerHTML =
+          "Account doesn't exist! Try again";
+      });
+  } catch (error) {
+    login_error.classList.remove("hidden");
+    document.getElementById("login_error").innerHTML = error.message;
+    return false;
+  }
 
-    let email = document.getElementById('email').value;
-    let password = document.getElementById('password').value;
-    let spinner = document.getElementById('spinner');
+  async function Login() {
+    let responseData;
 
-    spinner.classList.add('spinner');
+    let data = {
+      email: document.getElementById("email").value,
+      password: document.getElementById("password").value,
+    };
 
-    setTimeout(() => {
-        try {
-            spinner.classList.remove('spinner');
-            validator.validateEmail(email);
-            
-        } catch (error) {
-            
-            email_error.classList.remove("hidden");
-            document.getElementById('email_error').innerHTML = error.message;
-            return false;
-        }
-        try {
-            validator.validatePassword(password);
-            alert ("login");
+    let response = await fetch(
+      "https://dentministrator.herokuapp.com/auth/signin",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
-        } catch (error) {
-            pass_error.classList.remove("hidden");
-            document.getElementById('pass_error').innerHTML = error.message;
-            return false;
-        }       
-    }, 2000);   
-}
+    if (response.ok) {
+      spinner.classList.remove("spinner");
+      responseData = await response.json();
+      return responseData;
+    } else {
+      spinner.classList.remove("spinner");
+      throw new Error("Account already exists!");
+    }
+  }
 
-function removeEmailError(){
+  function removeEmailError() {
     email_error.classList.add("hidden");
-}
+  }
 
-document.getElementById('email').addEventListener('input', removeEmailError);
+  document.getElementById("email").addEventListener("input", removeEmailError);
 
-function removePasswordError(){
+  function removePasswordError() {
     pass_error.classList.add("hidden");
+  }
+  document
+    .getElementById("password")
+    .addEventListener("input", removePasswordError);
 }
-document.getElementById('password').addEventListener('input', removePasswordError);
